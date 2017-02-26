@@ -1,7 +1,8 @@
 import { combineReducers } from 'redux-immutable'
+import fetchReducer from './fetchReducer'
 
 const rootReducer = combineReducers({
-  it: () => {}
+  fetchState: fetchReducer
 })
 
 export default rootReducer

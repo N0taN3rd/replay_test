@@ -1,13 +1,11 @@
 import React from 'react'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-
+import ReplayFetch from '../components/replayFetch'
 
 const App = () => (
-  <MuiThemeProvider>
-    <div>
-      <h2>Hello, </h2>
-    </div>
-  </MuiThemeProvider>
+  <div>
+    <h2>Hello, </h2>
+    <ReplayFetch/>
+  </div>
 )
 
 export default App
