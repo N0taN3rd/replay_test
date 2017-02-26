@@ -1,6 +1,6 @@
 import Constants  from '../constants'
 
-const { Fetch } = Constants
+const {Fetch} = Constants
 
 const doingFetch = url => ({
   type: Fetch.FETCH_STARTED,
@@ -9,7 +9,7 @@ const doingFetch = url => ({
 
 export const doFetch = url => dispatch => {
   dispatch(doingFetch())
-  return fetch(url).then(response => {
+  return fetch(url, {headers: {'upgrade-insecure-requests': 1}}).then(response => {
     return response.json().then(json => dispatch(fetchDone(response, json)))
   }).catch(err => dispatch(fetchError(err)))
 }
