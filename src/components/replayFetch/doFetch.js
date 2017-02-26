@@ -3,7 +3,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 
 const DoFetch = ({doFetch}) => (
   <RaisedButton primary label="do fetch"
-                onTouchTap={() => doFetch('http://memgator.cs.odu.edu:1208/timemap/json/http://cs.odu.edu')}/>
+                onTouchTap={() => doFetch('https://api.github.com/repos/N0taN3rd/wail')}/>
 )
 
 export default DoFetch
