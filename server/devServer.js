@@ -3,6 +3,18 @@ const path = require('path')
 const webpack = require('webpack')
 const compress = require('compression')
 const fs = require('fs-extra')
+const pkg = require(path.resolve(process.cwd(), 'package.json'))
+
+const webpackDevMiddleware = require('webpack-dev-middleware')
+const webpackHotMiddleware = require('webpack-hot-middleware')
+
+const compiler = webpack(webpackConfig);
+const middleware = webpackDevMiddleware(compiler, {
+  noInfo: true,
+  publicPath: webpackConfig.output.publicPath,
+  silent: true,
+  stats: 'errors-only',
+});
 
 const app = express()
 
