@@ -1,11 +1,9 @@
-const { resolve } = require('path')
+const {resolve} = require('path')
 const webpack = require('webpack')
+const ExtractTextPlugin = require("extract-text-webpack-plugin")
 
 module.exports = {
   entry: [
-    'react-hot-loader/patch',
-    // activate HMR for React
-
     'webpack-dev-server/client?http://localhost:8080',
     // bundle the client for webpack-dev-server
     // and connect to the provided endpoint
@@ -13,7 +11,8 @@ module.exports = {
     'webpack/hot/only-dev-server',
     // bundle the client for hot reloading
     // only- means to only hot reload for successful updates
-
+    'react-hot-loader/patch',
+    // activate HMR for React
     './index.js'
     // the entry point of our app
   ],
@@ -54,8 +53,10 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-          'style-loader',
-          'css-loader?modules'
+          {loader: "style-loader"},
+          {
+            loader: "css-loader"
+          },
         ],
       },
       {
@@ -77,8 +78,12 @@ module.exports = {
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     // enable HMR globally
-
-    new webpack.NamedModulesPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
     // prints more readable module names in the browser console on HMR updates
+    new webpack.NamedModulesPlugin(),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('development')
+    })
+
   ],
 }

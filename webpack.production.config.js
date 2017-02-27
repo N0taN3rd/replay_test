@@ -30,8 +30,10 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-          'style-loader',
-          'css-loader?modules'
+          {loader: "style-loader"},
+          {
+            loader: "css-loader"
+          },
         ],
       },
       {
@@ -49,4 +51,11 @@ module.exports = {
       }
     ],
   },
+
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('production')
+    })
+
+  ],
 }

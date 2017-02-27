@@ -1,19 +1,26 @@
-import { createStore, applyMiddleware, compose } from 'redux'
-import thunk from 'redux-thunk'
-import promiseMiddleware from 'redux-promise'
-// import { ipc, requestHandler } from '../middleware'
+import { createStore, compose } from 'redux'
+import rootMiddleware from '../middleware'
 import rootReducer from '../reducers'
+import { Map } from 'immutable'
 import * as actionCreators from '../actions'
 
-const configureStore = () => {
-  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+const getComposer = () => {
+  if (!!window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) {
+    console.log('we have redux devtools compose')
+    return window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
       actionCreators
-    }) || compose
+    })
+  } else {
+    console.log('we do not have redux devtools compose')
+    return compose
+  }
+}
+
+const configureStore = () => {
   const store = createStore(
     rootReducer,
-    composeEnhancers(
-      applyMiddleware(thunk, promiseMiddleware)
-    )
+    Map({}),
+    getComposer()(rootMiddleware)
   )
 
   if (module.hot) {

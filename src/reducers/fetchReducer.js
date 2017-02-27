@@ -1,21 +1,34 @@
 import Constants  from '../constants'
+import Immutable from 'immutable'
 import { FetchRecord } from '../records'
 
-const {Fetch} = Constants
+const {Fetch, FetchGet, FetchLocalImage} = Constants
 
-const fetchReducer = (state = new FetchRecord(), action) => {
+const fetchGet = (state = Immutable.Map({done: false, wasError: false, res: null, body: null, err: null}), action) => {
   switch (action.type) {
-    case Fetch.FETCH_STARTED:
-      return state.fetchStarted(action.url)
-    case Fetch.FETCH_DONE:
+    case FetchGet.FETCH_GET_DONE:
       const {res, body} = action
-      return state.fetchDone(res, body)
-    case Fetch.FETCH_ERROR:
+      return state.merge({done: true, wasError: false, res, body})
+    case FetchGet.FETCH_ERROR:
       const {err} = action
-      return state.fetchError(err)
+      return state.merge({done: true, wasError: true, err})
     default:
       return state
   }
 }
 
-export default fetchReducer
+export const fetchLocalIm = (state = Immutable.Map({done: false, wasError: false, body: null, err: null}), action) => {
+  switch (action.type) {
+    case FetchLocalImage.FETCH_LOCAL_IMAGE_DONE:
+      const {blob} = action
+      console.log('fetch local im done', action)
+      return state.merge({done: true, wasError: false, body: blob})
+    case FetchGet.FETCH_LOCAL_IMAGE_ERROR:
+      const {err} = action
+      return state.merge({done: true, wasError: true, err})
+    default:
+      return state
+  }
+}
+
+export default fetchGet

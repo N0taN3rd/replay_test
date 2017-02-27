@@ -1,4 +1,6 @@
 import 'babel-polyfill'
+import './components/app.css'
+import 'react-flex/index.css'
 import React from 'react'
 import { render } from 'react-dom'
 import { AppContainer } from 'react-hot-loader'
@@ -19,7 +21,7 @@ render(
 // Hot Module Replacement API
 if (module.hot) {
   module.hot.accept('./containers/root', () => {
-    const NewRoot = require('./containers/root')
+    const NewRoot = require('./containers/root').default
     render(
       <AppContainer>
         <NewRoot store={store}/>

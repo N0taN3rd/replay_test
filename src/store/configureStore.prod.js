@@ -1,12 +1,12 @@
-import { createStore, applyMiddleware, compose } from 'redux'
-import thunk from 'redux-thunk'
-import promiseMiddleware from 'redux-promise'
-import { ipc, requestHandler } from '../middleware'
+import { createStore, compose } from 'redux'
+import rootMiddleware from '../middleware'
 import rootReducer from '../reducers'
+import { Map } from 'immutable'
 
 const configureStore = () => createStore(
   rootReducer,
-  applyMiddleware(thunk, promiseMiddleware)
+  Map({}),
+  compose(rootMiddleware)
 )
 
 export default configureStore

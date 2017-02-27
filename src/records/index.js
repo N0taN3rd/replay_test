@@ -16,7 +16,7 @@ class FetchResponse extends Record({
 export class FetchRecord extends Record({
   isFetching: false,
   haveResult: false,
-  done: true,
+  done: false,
   result: null,
   res: new FetchResponse(),
   wasError: false,
@@ -43,3 +43,4 @@ export class FetchRecord extends Record({
     })
   }
 }
+
