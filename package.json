@@ -59,6 +59,6 @@
   },
   "scripts": {
     "start": "export NODE_ENV=development; webpack-dev-server",
-    "build": "webpack --config webpack.production.config.js --color -p --progress"
+    "build": "webpack --config webpack.production.config.js --color --progress"
   }
 }
