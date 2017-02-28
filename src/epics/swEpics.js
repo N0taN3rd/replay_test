@@ -5,7 +5,6 @@ import constants from '../constants'
 const {ServiceWorker} = constants
 //SEND_SW_MESSAGE, RECEIVED_SW_MESSAGE, SEND_SW_DM
 
-
 const gotMessage = event => {
   if (event.data.type === 'ack') {
     return {
@@ -23,23 +22,39 @@ const gotMessage = event => {
 
 const gotDM = event => ({
   type: ServiceWorker.RECEIVED_SW_DM,
+  wasError: false,
   m: event.data
 })
 
+const sendDmError = error => ({
+  type: ServiceWorker.RECEIVED_SW_DM,
+  wasError: false,
+  err: error
+})
+
 const doSend = message => new Promise((resolve, reject) => {
-  const swMessageChannle = new MessageChannel()
-  swMessageChannle.port1.onmessage = (event) => {
-    resolve(event)
+  if (navigator.serviceWorker.controller) {
+    const swMessageChannle = new MessageChannel()
+    swMessageChannle.port1.onmessage = (event) => {
+      resolve(event)
+    }
+    // Send the message
+    try {
+      navigator.serviceWorker.controller.postMessage({type: 'dm', m: message}, [swMessageChannle.port2])
+    } catch (err) {
+      reject(err)
+    }
+  } else {
+    reject(new Error('ServiceWorkers can not be sent direct messages'))
   }
-  // Send the message
-  navigator.serviceWorker.controller.postMessage(message, [swMessageChannle.port2])
 })
 
 export const sendMessageEpic = action$ =>
   action$.ofType(ServiceWorker.SEND_SW_DM)
     .mergeMap(action =>
       Observable.fromPromise(doSend(action.message))
-        .map(event => gotDM(event))
+        .map(gotDM)
+        .catch(sendDmError)
     )
 
 export const startListeningEpic = action$ =>

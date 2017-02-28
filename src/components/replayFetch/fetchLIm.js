@@ -23,9 +23,8 @@ const FetchLIm = (props) => {
     return (<CircularProgress />)
   } else {
     if (!props.fetchLIState.get('wasError')) {
-      console.log('done')
+      console.log('fetch local image done')
       return (<div>
-        <p>I hope this gets rewritten: {theUrl}</p>
         <img src={URL.createObjectURL(props.fetchLIState.get('body'))}/>
       </div>)
     } else {

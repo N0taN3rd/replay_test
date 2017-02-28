@@ -1,33 +1,69 @@
-import React, { PropTypes } from 'react'
+import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
+import { List, ListItem } from 'material-ui/List'
+import Subheader from 'material-ui/Subheader'
 import { bindActionCreators } from 'redux'
 import { onlyUpdateForKeys, setDisplayName, compose } from 'recompose'
-import JSONTree from 'react-json-tree'
+import ListContainer from '../util/listContainer'
 import CircularProgress from 'material-ui/CircularProgress'
-import { doFetchGet } from '../../actions/fetchActions'
+import * as fA from '../../actions/fetchActions'
+import numeral from 'numeral'
 
 const stateToProps = state => ({
   fetchState: state.get('fetchState')
 })
 
-const dispatchToProps = dispatch => bindActionCreators({doFetchGet}, dispatch)
+const dispatchToProps = dispatch => bindActionCreators(fA, dispatch)
 
 const enhance = compose(
   setDisplayName('DoFetch'),
   onlyUpdateForKeys(['fetchState'])
 )
 //doFetch('https://api.github.com/repos/N0taN3rd/wail')
+
+function * percenter (data) {
+  const vals = Array.from(Object.entries(data.toJS()))
+  let total = 0
+  for (const [l, b] of vals) {
+    total += b
+  }
+  for (const [l, b] of vals) {
+    yield {l, p: numeral(b / total).format('0.00%')}
+  }
+}
+const doSum = data => {
+  const vals = Array.from(Object.entries(data.toJS()))
+  let total = 0
+  for (const [l, b] of vals) {
+    total += b
+  }
+  let lis = []
+  vals.sort(([a1, a2], [b1, b2]) => {
+    if (a2 < b2) {
+      return 1
+    } else if (a2 > b2) {
+      return -1
+    } else {
+      return 0
+    }
+  })
+  for (const [l, b] of vals) {
+    lis.push(<ListItem key={`${l}${b}`} primaryText={`${numeral(b / total).format('0.00%')} ${l}`}/>)
+  }
+  return lis
+}
 const DoFetch = (props) => {
-  const theUrl = 'https://api.github.com/repos/N0taN3rd/wail'
+  const theUrl = 'https://api.github.com/repos/N0taN3rd/wail/languages'
   if (!props.fetchState.get('done')) {
     props.doFetchGet(theUrl)
     return (<CircularProgress />)
   } else {
     if (!props.fetchState.get('wasError')) {
-      return (<div>
-        <p>I hope this gets rewritten: {theUrl}</p>
-        <JSONTree data={props.fetchState.get('body')}/>
-      </div>)
+      return (
+        <ListContainer height={300}>
+          <List style={{maxHeight: 300, overflowY: 'auto'}} children={doSum(props.fetchState.get('body'))}/>
+        </ListContainer>
+      )
     } else {
       return (<p>Was Error: {String(props.fetchState.get('err'))}</p>)
     }

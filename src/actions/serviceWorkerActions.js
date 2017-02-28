@@ -1,4 +1,5 @@
 import constants from '../constants'
+import Promise from 'bluebird'
 
 const {ServiceWorker} = constants
 
@@ -13,3 +14,8 @@ export const installSWComplete = report => dispatch => {
   dispatch(startListeningSW())
   dispatch({type: ServiceWorker.SW_INSTALL_COMPLETE, report})
 }
+
+export const directMessageSw = message => ({
+  type: ServiceWorker.SEND_SW_DM,
+  message
+})

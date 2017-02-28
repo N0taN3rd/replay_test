@@ -25,9 +25,16 @@ class InstallSW extends Component {
   }
 
   render () {
+    let subtitle
+    if (this.props.installState.get('state') === ServiceWorker.SW_INSTALL_FAILED) {
+      subtitle = `${this.props.installState.get('report')} ${this.props.installState.get('error')}`
+    } else {
+      subtitle = this.props.installState.get('report')
+    }
     return (
-      <CardHeader title='Can we install?' subtitle={this.props.installState.get('report')}/>
+      <CardHeader title='Can we install our Service Worker for the page?' subtitle={subtitle}/>
     )
+
   }
 }
 

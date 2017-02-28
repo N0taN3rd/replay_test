@@ -1,16 +1,17 @@
 import React from 'react'
-import ReplayFetch from '../components/replayFetch'
+import DocumentDomain from '../components/documentDomain'
 import Intro from '../components/intro'
 import ServiceWorkers from '../components/sw'
 import Fetcher from '../components/replayFetch'
+import Iframes from '../components/iframes'
 
 const App = () => (
   <div className='container'>
     <Intro/>
-    <div style={{overflowY: 'auto'}}>
-      <ServiceWorkers/>
-      <Fetcher/>
-    </div>
+    <ServiceWorkers/>
+    <Fetcher/>
+    <DocumentDomain />
+    <Iframes/>
   </div>
 )
 

@@ -21,7 +21,7 @@ const swInstallReducer = (state = Immutable.fromJS(is_Install), action) => {
     case ServiceWorker.INSTALL_SW_CANNOT:
       return state.merge({report: action.report, state: ServiceWorker.INSTALL_SW_CANNOT})
     case ServiceWorker.SW_INSTALL_FAILED:
-      return state.merge({report: action.report, err: action.err, state: ServiceWorker.SW_INSTALL_FAILED})
+      return state.merge({report: action.report, err: String(action.err), state: ServiceWorker.SW_INSTALL_FAILED})
     default:
       return state
   }
@@ -38,6 +38,15 @@ const swMessageReducer = (state = Immutable.List(), action) => {
   }
 }
 
+const swDMMessageReducer = (state = Immutable.Map(), action) => {
+  switch (action.type) {
+    case ServiceWorker.RECEIVED_SW_DM:
+      return state.merge({m: action.m, time: moment()})
+    default:
+      return state
+  }
+}
+
 const swNetworkMessageReducer = (state = Immutable.List(), action) => {
   switch (action.type) {
     case ServiceWorker.GOT_NETWORK_MESSAGE:
@@ -48,6 +57,7 @@ const swNetworkMessageReducer = (state = Immutable.List(), action) => {
 }
 
 const swReducers = {
+  swDMMessageReducer,
   swInstallReducer,
   swMessageReducer,
   swNetworkMessageReducer

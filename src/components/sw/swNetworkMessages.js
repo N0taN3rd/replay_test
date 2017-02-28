@@ -1,12 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import { installSW } from '../../actions/serviceWorkerActions'
-import { CardText, CardHeader } from 'material-ui/Card'
 import { List, ListItem } from 'material-ui/List'
 import Divider from 'material-ui/Divider'
 import DisplayNetwork from './displayNetwork'
-import constants from '../../constants'
 
 const stateToProps = state => ({swNetworkMessageState: state.get('swNetworkMessageState')})
 
@@ -39,7 +35,7 @@ class SwNetworkMesssageList extends Component {
 
   render () {
     return (
-      <List style={{maxHeight: 200, overflowY: 'auto'}}>
+      <List style={{maxHeight: 200, overflowY: 'auto', paddingTop: 0}}>
         {this.makeLis()}
       </List>
     )

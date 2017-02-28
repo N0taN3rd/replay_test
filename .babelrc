@@ -9,13 +9,11 @@
           ]
         },
         "modules": false,
-        "useBuiltIns": true
+        "useBuiltIns": true,
+        "debug": true
       }
     ],
     "react",
     "stage-0"
-  ],
-  "plugins": [
-    "react-hot-loader/babel"
   ]
 }
