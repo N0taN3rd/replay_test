@@ -11,7 +11,6 @@ const App = () => (
     <ServiceWorkers/>
     <Fetcher/>
     <DocumentDomain />
-    <Iframes/>
   </div>
 )
 
