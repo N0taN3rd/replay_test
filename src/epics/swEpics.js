@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs'
+import {Observable}  from 'rxjs'
 import Promise from 'bluebird'
 import constants from '../constants'
 
@@ -20,10 +20,9 @@ const gotMessage = event => {
 
 }
 
-const gotDM = event => ({
+const gotDM = whatsUp => ({
   type: ServiceWorker.RECEIVED_SW_DM,
-  wasError: false,
-  m: event.data
+  ...whatsUp
 })
 
 const sendDmError = error => ({
@@ -33,34 +32,47 @@ const sendDmError = error => ({
 })
 
 const doSend = message => new Promise((resolve, reject) => {
+  console.log('do send ', message)
   if (navigator.serviceWorker.controller) {
     const swMessageChannle = new MessageChannel()
     swMessageChannle.port1.onmessage = (event) => {
-      resolve(event)
+      resolve({
+        wasError: false,
+        m: event.data
+      })
     }
     // Send the message
     try {
       navigator.serviceWorker.controller.postMessage({type: 'dm', m: message}, [swMessageChannle.port2])
     } catch (err) {
-      reject(err)
+      console.error(err)
+      resolve({
+        wasError: true,
+        m: String(err)
+      })
     }
   } else {
-    reject(new Error('ServiceWorkers can not be sent direct messages'))
+    console.log('nope')
+    resolve({
+      wasError: true,
+      m: 'ServiceWorkers can not be sent direct messages at this time. Please Refresh the page'
+    })
   }
 })
 
 export const sendMessageEpic = action$ =>
   action$.ofType(ServiceWorker.SEND_SW_DM)
-    .mergeMap(action =>
-      Observable.fromPromise(doSend(action.message))
-        .map(gotDM)
-        .catch(sendDmError)
+    .mergeMap(action => {
+        console.log('sw dm epic', action)
+        return Observable.fromPromise(doSend(action.message))
+          .map(gotDM)
+      }
     )
 
 export const startListeningEpic = action$ =>
   action$.ofType(ServiceWorker.LISTEN_FOR_SWM)
     .switchMap(action =>
-      Observable.fromEvent(navigator.serviceWorker, 'message')
+     Observable.fromEvent(navigator.serviceWorker, 'message')
         .map(event => gotMessage(event))
     )
 

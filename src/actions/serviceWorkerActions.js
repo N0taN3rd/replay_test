@@ -11,8 +11,16 @@ export const startListeningSW = () => ({type: ServiceWorker.LISTEN_FOR_SWM})
 export const sendSW_Message = message => ({type: ServiceWorker.SEND_SW_MESSAGE, message})
 export const sendSW_DM = message => ({type: ServiceWorker.SEND_SW_DM, message})
 export const installSWComplete = report => dispatch => {
-  dispatch(startListeningSW())
-  dispatch({type: ServiceWorker.SW_INSTALL_COMPLETE, report})
+  try {
+    dispatch(startListeningSW())
+  } catch (err) {
+    console.error('listing error', err)
+  }
+  try {
+    dispatch({type: ServiceWorker.SW_INSTALL_COMPLETE, report})
+  } catch (err) {
+    console.error('install complete err', err)
+  }
 }
 
 export const directMessageSw = message => ({
