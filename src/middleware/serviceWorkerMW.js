@@ -10,19 +10,27 @@ const installServiceWorker = store => next => action => {
   switch (action.type) {
     case ServiceWorker.INSTALL_SW: {
       if ('serviceWorker' in navigator) {
-        if (!navigator.serviceWorker.controller) {
-          return navigator.serviceWorker.register('replayTest_SW.js')
-            .then((reg) => {
-              store.dispatch(swActions.installSWComplete('The ServiceWorker replayTest_SW.js registered successfully.'))
-            })
-            .catch(err => {
-              console.error(err)
-              return next(swActions.installSWFAILED('The ServiceWorker replayTest_SW.js registration failed.', err))
-            })
-        } else {
-          store.dispatch(swActions.installSWComplete('The ServiceWorker replayTest_SW.js registered successfully.'))
-          break
-        }
+        return navigator.serviceWorker.register('replayTest_SW.js')
+          .then((reg) => {
+            store.dispatch(swActions.installSWComplete('The ServiceWorker replayTest_SW.js registered successfully.'))
+          })
+          .catch(err => {
+            console.error(err)
+            return next(swActions.installSWFAILED('The ServiceWorker replayTest_SW.js registration failed.', err))
+          })
+        // if (!navigator.serviceWorker.controller) {
+        //   return navigator.serviceWorker.register('replayTest_SW.js')
+        //     .then((reg) => {
+        //       store.dispatch(swActions.installSWComplete('The ServiceWorker replayTest_SW.js registered successfully.'))
+        //     })
+        //     .catch(err => {
+        //       console.error(err)
+        //       return next(swActions.installSWFAILED('The ServiceWorker replayTest_SW.js registration failed.', err))
+        //     })
+        // } else {
+        //   store.dispatch(swActions.installSWComplete('The ServiceWorker replayTest_SW.js registered successfully.'))
+        //   break
+        // }
       } else {
         return next(swActions.installSWCannot('ServiceWorker is not supported in this browser/client.'))
       }

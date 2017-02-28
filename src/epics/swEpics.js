@@ -1,4 +1,4 @@
-import {Observable}  from 'rxjs'
+import { Observable }  from 'rxjs'
 import Promise from 'bluebird'
 import constants from '../constants'
 
@@ -33,31 +33,47 @@ const sendDmError = error => ({
 
 const doSend = message => new Promise((resolve, reject) => {
   console.log('do send ', message)
-  if (navigator.serviceWorker.controller) {
-    const swMessageChannle = new MessageChannel()
-    swMessageChannle.port1.onmessage = (event) => {
-      resolve({
-        wasError: false,
-        m: event.data
-      })
-    }
-    // Send the message
-    try {
-      navigator.serviceWorker.controller.postMessage({type: 'dm', m: message}, [swMessageChannle.port2])
-    } catch (err) {
-      console.error(err)
+  if ('serviceWorker' in navigator) {
+    if (navigator.serviceWorker.controller) {
+      const swMessageChannle = new MessageChannel()
+      try {
+        swMessageChannle.port1.onmessage = (event) => {
+          resolve({
+            wasError: false,
+            m: event.data
+          })
+        }
+      } catch (err) {
+        console.error(err)
+        resolve({
+          wasError: true,
+          m: String(err)
+        })
+      }
+      // Send the message
+      try {
+        navigator.serviceWorker.controller.postMessage({type: 'dm', m: message}, [swMessageChannle.port2])
+      } catch (err) {
+        console.error(err)
+        resolve({
+          wasError: true,
+          m: String(err)
+        })
+      }
+    } else {
+      console.log('nope')
       resolve({
         wasError: true,
-        m: String(err)
+        m: 'ServiceWorkers can not be sent direct messages at this time. Please Refresh the page'
       })
     }
   } else {
-    console.log('nope')
     resolve({
       wasError: true,
-      m: 'ServiceWorkers can not be sent direct messages at this time. Please Refresh the page'
+      m: 'ServiceWorkers are enabled in this browser :('
     })
   }
+
 })
 
 export const sendMessageEpic = action$ =>
@@ -72,7 +88,7 @@ export const sendMessageEpic = action$ =>
 export const startListeningEpic = action$ =>
   action$.ofType(ServiceWorker.LISTEN_FOR_SWM)
     .switchMap(action =>
-     Observable.fromEvent(navigator.serviceWorker, 'message')
+      Observable.fromEvent(navigator.serviceWorker, 'message')
         .map(event => gotMessage(event))
     )
 
