@@ -44,10 +44,11 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
-        use: [
-          'babel-loader',
-        ],
+        test: /\.jsx?$/,
+        loader: "babel-loader",
+        query: {
+          cacheDirectory: true,
+        },
         exclude: /node_modules/
       },
       {
@@ -74,7 +75,11 @@ module.exports = {
       }
     ],
   },
-
+  resolve: {
+    alias: {
+      moment: 'moment/src/moment'
+    },
+  },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     // enable HMR globally

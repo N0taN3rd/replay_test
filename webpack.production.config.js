@@ -1,14 +1,12 @@
-const { resolve } = require('path')
+const {resolve} = require('path')
 const webpack = require('webpack')
+const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer')
 
 module.exports = {
-  entry: [
-    './index.js'
-  ],
+  entry: './index.js',
   output: {
-    filename: 'bundle.js',
-    // the output bundle
-
+    filename: '[name]-bundle.js',
+    chunkFilename: '[name]-chunk.js',
     path: resolve(__dirname, 'dist'),
 
     publicPath: '/'
@@ -21,10 +19,8 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
-        use: [
-          'babel-loader',
-        ],
+        test: /\.jsx?$/,
+        loader: "babel-loader",
         exclude: /node_modules/
       },
       {
@@ -51,11 +47,30 @@ module.exports = {
       }
     ],
   },
-
   plugins: [
+    new webpack.optimize.OccurrenceOrderPlugin(true),
+    new webpack.optimize.AggressiveMergingPlugin(),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'node-static',
+      minChunks(module, count) {
+        const context = module.context
+        return context && context.indexOf('node_modules') >= 0
+      },
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      mangle: false,
+      sourceMap: false,
+      compress: {
+        warnings: false,
+        drop_console: false,
+      }
+    }),
+    new webpack.IgnorePlugin(/^\.\/locale$/, [/moment$/]),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production')
-    })
-
+    }),
+    // new BundleAnalyzerPlugin({
+    //   analyzerMode: 'static'
+    // }),
   ],
 }
