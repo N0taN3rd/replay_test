@@ -13,6 +13,7 @@ const installServiceWorker = store => next => action => {
         return navigator.serviceWorker.register('replayTest_SW.js')
           .then((reg) => {
             store.dispatch(swActions.installSWComplete('The ServiceWorker replayTest_SW.js registered successfully.'))
+            return reg.active
           })
           .catch(err => {
             console.error(err)

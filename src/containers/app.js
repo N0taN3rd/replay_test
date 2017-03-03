@@ -3,7 +3,7 @@ import DocumentDomain from '../components/documentDomain'
 import Intro from '../components/intro'
 import ServiceWorkers from '../components/sw'
 import Fetcher from '../components/replayFetch'
-import Iframes from '../components/iframes'
+import Options from '../components/options'
 
 const App = () => (
   <div className='container'>
@@ -11,6 +11,7 @@ const App = () => (
     <ServiceWorkers/>
     <Fetcher/>
     <DocumentDomain />
+    <Options/>
   </div>
 )
 
