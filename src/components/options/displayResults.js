@@ -1,16 +1,13 @@
 import React, { Component, PropTypes } from 'react'
-import  Card, { CardTitle, CardHeader, CardText } from 'material-ui/Card'
-import * as colors from 'material-ui/styles/colors'
-import { pure, setDisplayName, compose, onlyUpdateForKeys } from 'recompose'
-import axios from 'axios'
+import {setDisplayName, compose, onlyUpdateForKeys } from 'recompose'
 import Inspector from 'react-inspector'
 
 const enhance = compose(
-  setDisplayName('OptionsResults'),
+  setDisplayName('DisplayResults'),
   onlyUpdateForKeys(['res'])
 )
 
-const DisplayResults = ({res}) => (
+const DisplayResults = ({res, wasError}) => (
   <div style={{
     margin: 'auto',
     width: '50%',
@@ -24,14 +21,17 @@ const DisplayResults = ({res}) => (
       <Inspector style={{width: 300}} data={res}/>
       <div>
         <p>Displaying the returned HTML sent by github.io</p>
-        <div dangerouslySetInnerHTML={{__html: res.data}}/>
+        {!wasError &&  <div dangerouslySetInnerHTML={{__html: res.data}}/>}
+        {(wasError && !res.data) &&  <p>An error occurred can not display the html :(</p>}
+        {(wasError && res.data) &&  <div dangerouslySetInnerHTML={{__html: res.data}}/>}
       </div>
     </div>
   </div>
 )
 
 DisplayResults.propTypes = {
-  res: PropTypes.object.isRequired
+  res: PropTypes.object.isRequired,
+  wasError: PropTypes.bool.isRequired
 }
 
 export default enhance(DisplayResults)

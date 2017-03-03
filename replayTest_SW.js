@@ -1,5 +1,5 @@
 console.log('Loading ServiceWorker.');
-var version = '{{ 1.0 }}';
+var version = '{{ 1.1 }}';
 
 self.addEventListener('install', function (event) {
   console.log('Installing ServiceWorker.');
@@ -21,12 +21,14 @@ function sendToClients (message) {
 }
 
 self.addEventListener('fetch', function (event) {
-  console.log('[ServiceWorker] Fetch event triggered.');
-  console.log('[ServiceWorker] ', event.request);
-  console.log('[ServiceWorker] ', event.request.headers);
+  console.log('[ServiceWorker] Fetch event triggered');
   var req = {}, cloned = event.request.clone(), head = {};
+  console.log('[ServiceWorker] URL:', cloned.url, 'Method:', cloned.method, ' Mode: ', cloned.mode);
+  console.log('[ServiceWorker] Referrer: ', cloned.referrer, ' ReferrerPolicy: ', cloned.referrerPolicy);
+  console.log('[ServiceWorker] Credentials: ', cloned.credentials, ' Redirect: ', cloned.redirect);
   for (var hdr of cloned.headers.entries()) {
     head[hdr[0]] = hdr[1];
+    console.log('[ServiceWorker] ', hdr[0], ':', hdr[1]);
   }
   req.method = cloned.method;
   req.url = cloned.url;

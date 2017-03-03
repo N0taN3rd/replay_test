@@ -18,9 +18,14 @@
 <script>
   var Replay_Test = Replay_Test || {};
   Replay_Test.location = 'Funky Town';
-  Replay_Test['.postMessage('] = {
-    'location': 'Funky Town'
-  }
+  Replay_Test.postMessage = function () {
+    return 'Going off the rails on a crazy train';
+  };
+  Replay_Test.poster = {
+    "postMessage": function () {
+      console.log(Replay_Test.postMessage());
+    }
+  };
 </script>
 <div id="root"></div>
 <script src="onef/bundle.js"></script>
