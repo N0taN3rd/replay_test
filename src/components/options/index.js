@@ -61,7 +61,7 @@ export default  class Opts extends Component {
       this.setState({done: true, res: response})
     }).catch(error => {
       console.error(error)
-      this.setState({done: true, wasError: true, res: error})
+      this.setState({done: true, wasError: true, res: error.response})
 
     })
   }
@@ -71,21 +71,23 @@ export default  class Opts extends Component {
       this.doOpts()
     }
     return (
-      <Card style={{margin: 10, height: 200}}>
+      <Card style={{
+        margin: 10
+      }}>
         <CardTitle
           titleColor={colors.white}
           subtitleColor={colors.white}
-          style={{width: 'inherit',  backgroundColor: colors.teal700}}
+          style={{width: 'inherit', backgroundColor: colors.teal700}}
           title='Can I Execute An HTTP Options Request?'
-          subtitle={'The iframe is not generated using js.'}
+          subtitle={`When replayed the response should be an error status code 405 if archived via recording. The request is made to window.location.href which is ${window.location.href}`}
         />
         <div style={{
-          margin: 'auto',
-          width: '50%',
-          padding: '10px',
+          maxHeight: 300,
+          overflowY: 'auto',
+          height: 300
         }}>
-          {!this.state.done && <CardHeader subtitle={'Making Request'}/>}
-          {this.state.done && <Inspector style={{width: 300}} data={this.state.res}/>}
+          {!this.state.done && <CardHeader subtitle={'Making Request. The raw r'}/>}
+          {this.state.done && <div dangerouslySetInnerHTML={{__html: this.state.res.data}}/>}
         </div>
       </Card>
     )
