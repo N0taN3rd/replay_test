@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import {setDisplayName, compose, onlyUpdateForKeys } from 'recompose'
+import { setDisplayName, compose, onlyUpdateForKeys } from 'recompose'
 import Inspector from 'react-inspector'
 
 const enhance = compose(
@@ -21,9 +21,10 @@ const DisplayResults = ({res, wasError}) => (
       <Inspector style={{width: 300}} data={res}/>
       <div>
         <p>Displaying the returned HTML sent by github.io</p>
-        {!wasError &&  <div dangerouslySetInnerHTML={{__html: res.data}}/>}
-        {(wasError && !res.data) &&  <p>An error occurred can not display the html :(</p>}
-        {(wasError && res.data) &&  <div dangerouslySetInnerHTML={{__html: res.data}}/>}
+        {!wasError && <div dangerouslySetInnerHTML={{__html: res.data}}/>}
+        {(wasError && !res.response) && <p>An error occurred can not display the html :(</p>}
+        {(wasError && res.response && res.response.data) &&
+        <div dangerouslySetInnerHTML={{__html: res.response.data}}/>}
       </div>
     </div>
   </div>
