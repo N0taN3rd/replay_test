@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import  Card, { CardTitle, CardHeader } from 'material-ui/Card'
 import * as colors from 'material-ui/styles/colors'
 import { pure, setDisplayName, compose } from 'recompose'
-import { Flex } from 'react-flex'
+import Flexbox from 'flexbox-react'
 import FetchGithubApi from './fetchGithubApi'
 import FetchLocalImage  from './anImage'
 
@@ -23,7 +23,7 @@ const subtitle = (
 )
 
 const Fetcher = enhance(() => (
-  <Card style={{margin: 10}}>
+  <Card style={{margin: 10}} id="rfc">
     <CardTitle
       titleColor={colors.white}
       subtitleColor={colors.white}
@@ -31,10 +31,15 @@ const Fetcher = enhance(() => (
       title='Can We Use Fetch?'
       subtitle={subtitle}
     />
-    <Flex row alignItems='center' justifyContent='space-between'>
+    <Flexbox
+      flexWrap='wrap'
+      flexDirection='row'
+      alignItems='center'
+      justifyContent='space-around'
+    >
       <FetchGithubApi/>
       <FetchLocalImage/>
-    </Flex>
+    </Flexbox>
   </Card>
 ))
 

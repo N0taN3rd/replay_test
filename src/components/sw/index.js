@@ -1,11 +1,11 @@
-import React, { Component, PropTypes } from 'react'
+import React from 'react'
 import  Card, { CardTitle, CardHeader } from 'material-ui/Card'
 import * as colors from 'material-ui/styles/colors'
 import { pure, setDisplayName, compose } from 'recompose'
-import { Flex } from 'react-flex'
 import InstallSW from './installSW'
 import TalkToSw from './talkToSw'
 import SwNetworkMesssageList from './swNetworkMessages'
+import Flexbox from 'flexbox-react'
 
 const enhance = compose(
   setDisplayName('ServiceWorker'),
@@ -39,16 +39,30 @@ const ServiceWorker = enhance(() => (
       style={{backgroundColor: colors.teal700}}
       title='Can We Use A Service Worker?'
       subtitle={subtitle}/>
-    <Flex row alignItems='center' justifyContent='space-between'>
-      <div style={{width: '50%', height: 200}}>
+    <Flexbox
+      flexWrap='wrap'
+      flexDirection='row'
+      alignItems='flex-start'
+      justifyContent='space-between'
+      margin='10px'
+    >
+      <Flexbox
+        flexWrap='wrap'
+        flexDirection='column'
+        maxWidth="50%"
+      >
         <InstallSW />
         <TalkToSw />
-      </div>
-      <div style={{width: '50%'}}>
+      </Flexbox>
+      <Flexbox
+        flexWrap='wrap'
+        flexDirection='column'
+        maxWidth="50%"
+      >
         <CardHeader title={networkTitle}/>
         <SwNetworkMesssageList />
-      </div>
-    </Flex>
+      </Flexbox>
+    </Flexbox>
   </Card>
 ))
 

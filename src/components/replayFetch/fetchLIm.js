@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
+import Avatar from 'material-ui/Avatar'
 import { bindActionCreators } from 'redux'
 import { onlyUpdateForKeys, setDisplayName, compose } from 'recompose'
 import CircularProgress from 'material-ui/CircularProgress'
@@ -23,10 +24,11 @@ const FetchLIm = (props) => {
     return (<CircularProgress />)
   } else {
     if (!props.fetchLIState.get('wasError')) {
-      console.log('fetch local image done')
-      return (<div>
-        <img src={URL.createObjectURL(props.fetchLIState.get('body'))}/>
-      </div>)
+      return (
+        <Avatar
+          src={URL.createObjectURL(props.fetchLIState.get('body'))}
+          size={200}
+        />)
     } else {
       return (<p>Was Error: {String(props.fetchLIState.get('err'))}</p>)
     }

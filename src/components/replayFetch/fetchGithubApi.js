@@ -12,15 +12,14 @@ const enhance = compose(
 
 const FetchGithubApi = () => (
   <div style={{width: '50%', height: 450, maxHeight: 450}}>
-    <CardHeader title='Can we request https://api.github.com/repos/N0taN3rd/wail/languages?'
+    <CardHeader title='Can we make a request to the github api?'
                 subtitle={'This request represents a page attempting to retrieve a resource from service running on its domain'}/>
     <CardText>
       <a style={{color: colors.teal700}}
-         key="wailLink" href="https://github.com/N0taN3rd/wail">The Web Archival Interface Layer (WAIL)</a> is
-      comprised of the following languages
+         key="wailLink" href="https://github.com/N0taN3rd/wail">WAIL</a> is
+      comprised of
     </CardText>
     <div style={{
-      margin: 'auto',
       width: '50%',
       padding: '10px',
     }}>

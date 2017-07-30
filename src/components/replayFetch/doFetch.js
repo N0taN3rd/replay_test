@@ -5,6 +5,7 @@ import Subheader from 'material-ui/Subheader'
 import { bindActionCreators } from 'redux'
 import { onlyUpdateForKeys, setDisplayName, compose } from 'recompose'
 import ListContainer from '../util/listContainer'
+import MyAutoSizer from '../util/myAutoSizer'
 import CircularProgress from 'material-ui/CircularProgress'
 import * as fA from '../../actions/fetchActions'
 import numeral from 'numeral'
@@ -19,9 +20,10 @@ const enhance = compose(
   setDisplayName('DoFetch'),
   onlyUpdateForKeys(['fetchState'])
 )
+
 //doFetch('https://api.github.com/repos/N0taN3rd/wail')
 
-function * percenter (data) {
+function* percenter (data) {
   const vals = Array.from(Object.entries(data.toJS()))
   let total = 0
   for (const [l, b] of vals) {
@@ -31,6 +33,7 @@ function * percenter (data) {
     yield {l, p: numeral(b / total).format('0.00%')}
   }
 }
+
 const doSum = data => {
   const vals = Array.from(Object.entries(data.toJS()))
   let total = 0
@@ -52,17 +55,21 @@ const doSum = data => {
   }
   return lis
 }
+
 const DoFetch = (props) => {
   const theUrl = 'https://api.github.com/repos/N0taN3rd/wail/languages'
   if (!props.fetchState.get('done')) {
     props.doFetchGet(theUrl)
-    return (<CircularProgress />)
+    return (<CircularProgress/>)
   } else {
     if (!props.fetchState.get('wasError')) {
       return (
-        <ListContainer height={300}>
-          <List style={{maxHeight: 300, overflowY: 'auto'}} children={doSum(props.fetchState.get('body'))}/>
-        </ListContainer>
+        <MyAutoSizer findElement="rfc">
+          {({height}) => (
+            <List style={{maxHeight: height - 350, height, overflowY: 'auto'}}
+                  children={doSum(props.fetchState.get('body'))}/>
+          )}
+        </MyAutoSizer>
       )
     } else {
       return (<p>Was Error: {String(props.fetchState.get('err'))}</p>)
